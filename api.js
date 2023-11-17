@@ -18,23 +18,26 @@ console.log("Ultima linea")
 */
 
 const http = require('http');
-
+const fs = require('fs');
 const PORT = 3000;
 
 const server = http.createServer((req, res) => {
   if (req.method === 'GET') {
-    const nombre = req.url.split('?')[0];
+    const nombre = req.url.split('?')[0].split('/')[1];
     const params = new URLSearchParams(req.url.split('?')[1]);
-    const mensaje = "Hola" + nombre + "me podrias solicitar tu edad"
+    
     if (params.has('edad')) {
       const edad = parseInt(params.get('edad'));
-
+      
       res.writeHead(200, { 'Content-Type': 'text/plain' });
-
+       
       if (edad >= 18) {
-        res.end(`${"Hola" + " " + nombre} es mayor de edad.\n`);
-      } else {
-        res.end(`${"Hola" + " " + nombre} no es mayor de edad.\n`);
+        fs.writeFileSync(`${'Hola ' + nombre}_mayor edad.txt`,`${'Hola ' + nombre} Es mayor de edad.\n`,(err) =>{
+        console.log('Archivo generado correctamente.')
+        })
+        res.end(`${'Hola ' + nombre} es mayor de edad.\n`);
+        } else {
+        res.end(`${'Hola ' + nombre} no es mayor de edad.\n`);
       }
     } else {
       res.writeHead(400, { 'Content-Type': 'text/plain' });
