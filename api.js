@@ -126,22 +126,16 @@ const server = http.createServer((req, res) => {
   if (req.method === 'GET') {
     const nombre = req.url.split('?')[0].split('/')[1];
     const params = new URLSearchParams(req.url.split('?')[1]);
-    if (params.has('edad')) {
-    const edad = parseInt(params.get('edad'));
     const usuarioEncontrado = users.find(users => users.name === nombre);
     if (usuarioEncontrado) {
       res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(`<p>Nombre: ${users.name}</p>
+      res.end(`<p>Nombre: ${usuarioEncontrado.name}</p>
                 <p>Edad: ${usuarioEncontrado.age}</p>
                 <p>Email: ${usuarioEncontrado.email}</p>
                 <p>Ciudad: ${usuarioEncontrado.city}</p>`);
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end(`${users.name} no encontrado.\n`);
-    }
-    } else {
-    res.writeHead(400, { 'Content-Type': 'text/plain' });
-    res.end('Por favor, proporciona el parámetro "edad" en la URL.\n');
     }
     } else {
       res.writeHead(400, { 'Content-Type': 'text/plain' });
